@@ -1,6 +1,6 @@
 {
   "name": "clothesstore-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "clothesstore api de productos",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.25.0",
     "cors": "^2.8.5",
     "country-code-lookup": "^0.0.20",
     "dotenv": "^14.2.0",
