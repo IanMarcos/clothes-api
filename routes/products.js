@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = Router();
 
-router.post('/', upload.array('prodImg', 2), createProduct);
+router.post('/', upload.array('prodImg', 3), createProduct);
 
 
 router.post('/pass', [

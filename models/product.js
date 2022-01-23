@@ -22,13 +22,8 @@ const ProductSchema = new Schema({
         default: 0
     },
     
-    frontImg:{
-        type: String,
-        required:true
-    },
-
-    backImg:{
-        type: String,
+    images:{
+        type: Array,
         required:true
     },
     
