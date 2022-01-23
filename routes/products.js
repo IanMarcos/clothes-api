@@ -1,21 +1,29 @@
 const { Router } = require('express');
 const { body } = require('express-validator');
-const { signIn, validatePassword } = require('../controllers/product');
+const multer  = require('multer');
+const path = require('path');
+const { createProduct, getProducts } = require('../controllers/product');
 const { validateResults } = require('./../middlewares');
 
+//Configuración de multer para que guarde archivos con su extensión
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage });
 const router = Router();
 
-router.post('/signin', [
-    body('email', 'El correo es obligatorio').notEmpty(),
-    body('email', 'No es un correo valido').isEmail(),
-    body('password', 'La contraseña es obligatoria').notEmpty(),
-    validateResults
-], signIn);
+router.post('/', upload.array('prodImg', 2), createProduct);
 
 
 router.post('/pass', [
     body('password', 'la contraseña es obligatoria').notEmpty(),
     validateResults
-], validatePassword);
+], getProducts);
 
 module.exports = router;

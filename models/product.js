@@ -1,32 +1,38 @@
 const { Schema, model } = require('mongoose');
 
 const ProductSchema = new Schema({
-    nombre: {
+    name: {
         type: String,
         required: true,
         default: '',
         unique: true
     },
 
-    descripcion:{
+    description:{
         type: String
     },
 
-    precio:{
+    price:{
         type: Number,
         required: true
     },
 
-    descuento:{
+    discount:{
         type: Number,
         default: 0
     },
     
-    imagenes:{
-        type: Array
+    frontImg:{
+        type: String,
+        required:true
+    },
+
+    backImg:{
+        type: String,
+        required:true
     },
     
-    pais:{
+    country:{
         type: String,
         required: true
     }

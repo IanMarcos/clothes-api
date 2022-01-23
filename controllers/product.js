@@ -1,32 +1,43 @@
+const lookup = require('country-code-lookup')
 const Product = require('../models/product');
+const { processImgs } = require('../helpers/img-processing');
 
-const renovateToken = (req, res) => {
-    // const user = req.authUser;
-    // const data = {uid: user._id, uName: user.name};
-    // //Renueva el token
-    // const cvToken = generateJWT(data);
-    // res.status(200).json({results: {cvToken, user}});
-}
+const createProduct = async(req, res) => {
+    let { name, description='', price, discount=0, country } = req.body;
+    price = Number(price);
+    discount = (Number(discount));
+    country = country.toUpperCase();
 
-const validatePassword = async(req, res) => {
-    // const {password} = req.body;
+    if(!name || name.length === 0){
+        return res.status(400).json({err: 'Nombre obligatorio'});
+    }
 
-    // const user = await User.findById(req.authUser);
-    // if( !user || !user.active ){
-    //     return res.status(401).json({ results:{ err:'En el token no había un usuario válido'} });
-    // }
+    if(!price || isNaN(Number(price))){
+        return res.status(400).json({err: 'Precio no valido'});
+    }
 
-    // if(! await passwordMatch(password, user.password)){
-    //     return res.status(400).json( {results: {err:'La contraseña no es válida'} } );
-    // }
+    if( !country || country.length !== 2 || lookup.byIso(country) === null ){
+        return res.status(400).json({err: 'Código de País no valido'});
+    }
     
-    // const uid = user._id.toString();
+    //Validación de descuento por pais
+    const max50 = ['CO', 'MX'];
+    const max30 = ['CL', 'PE'];
+    if(max50.includes(country) && discount > 50){
+        return res.status(400).json({err: 'Descuento muy alto para este país'});
+    }
+    if(max30.includes(country) && discount > 30){
+        return res.status(400).json({err: 'Descuento muy alto para este país'});
+    }
 
-    // res.status(200).json( {results: {uid}});
+    // //Validación de imagenes
+    // processImgs(imgs);
+
+    res.status(200).json( {results: req.body});
 
 }
 
-const signIn = async(req, res) => {
+const getProducts = async(req, res) => {
     
     // const { email, password } = req.body;
 
@@ -58,7 +69,6 @@ const signIn = async(req, res) => {
 }
 
 module.exports = {
-    signIn,
-    renovateToken,
-    validatePassword,
+    createProduct,
+    getProducts
 };

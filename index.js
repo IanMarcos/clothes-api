@@ -1,7 +1,4 @@
 require('dotenv').config()
-const Server = require('./server');
+const app = require('./server');
 
-
-const app = new Server();
-
-app.init();
+app.listen(8081);
