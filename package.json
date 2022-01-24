@@ -16,7 +16,6 @@
     "country-code-lookup": "^0.0.20",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
-    "express-validator": "^6.14.0",
     "mongoose": "^6.1.7",
     "multer": "^1.4.4",
     "sharp": "^0.29.3"
