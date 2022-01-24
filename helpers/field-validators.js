@@ -8,12 +8,17 @@ function validateFields({req, res}) {
     discount = Number(discount);
     country = country.toUpperCase();
 
-    if(!name || name.length === 0){
-        res.status(400).json({err: 'Nombre obligatorio'});
+    if(!name || name.length === 0 || name.length > 50){
+        res.status(400).json({err: 'Nombre demasiado largo'});
         return {err: true};
     }
 
-    if(!price || isNaN(price)){
+    if(description.length > 100){
+        res.status(400).json({err: 'Descripción demasiado largo'});
+        return {err: true};
+    }
+
+    if(!price || isNaN(price) || price < 0){
         res.status(400).json({err: 'Precio no valido'});
         return {err: true};
     }

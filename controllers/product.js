@@ -35,16 +35,23 @@ const createProduct = async(req, res) => {
         }); 
     });
 
-    const responses = await Promise.all(posts);
     const images = [];
+    try {
+        const responses = await Promise.all(posts);
 
-    responses.forEach(({status, data:{data: {url}}}) => {
-        if(status !== 200){
-            deleteDirContents('uploads');
-            return res.status(500).json( {err: 'Error al guardar imágenes'});
-        }
-        images.push(url);
-    });
+        responses.forEach(({status, data:{data: {url}}}) => {
+            if(status !== 200){
+                deleteDirContents('uploads');
+                return res.status(500).json( {err: 'Error al guardar imágenes'});
+            }
+            images.push(url);
+        });
+    } catch (error) {
+        deleteDirContents('uploads');
+        return res.status(400).json( {err: 'Problema con las imagenes subidas'});
+    }
+
+    
 
     //Se eliminan las imagenes del servidor
     deleteDirContents('uploads');
@@ -78,7 +85,7 @@ const getProducts = async(req, res) => {
 
     try {
         const products = await Product.find()
-            .select('-description -country -__v')
+            .select('-_id -description -country -__v')
             .skip( page * limit)
             .limit(limit)
             .lean().exec();     //Estos devuelven products como un objeto de js
@@ -88,7 +95,7 @@ const getProducts = async(req, res) => {
             product.discountPrice = round(price * (1-(discount*0.01)), 2);
         })
 
-        res.status(200).json( {results: {products}} );
+        res.status(200).json( {results: {products}, status:200} );
     } catch (error) {
         res.status(500).json( {results: {err:'Fallo en la conexión a la DB'}} );
     }
