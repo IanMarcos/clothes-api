@@ -1,10 +1,9 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
-
 const Product = require('../models/product');
 const { deleteDirContents } = require('../helpers/file-system');
-const { validateFields, validateFiles } = require('../helpers/field-validators');
+const { round, validateFields, validateFiles } = require('../helpers/field-validators');
 
 const createProduct = async(req, res) => {
     
@@ -65,7 +64,34 @@ const createProduct = async(req, res) => {
 }
 
 const getProducts = async(req, res) => {
-    
+    let { limit = 10, page = 1 } = req.query;
+
+    limit = Number(limit);
+    page = Number(page);
+
+    if(isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0){
+        limit=10;
+        page=1;
+    }
+
+    if(page > 0) page -=1;
+
+    try {
+        const products = await Product.find()
+            .select('-description -country -__v')
+            .skip( page * limit)
+            .limit(limit)
+            .lean().exec();     //Estos devuelven products como un objeto de js
+
+        products.forEach(product => {
+            const { price, discount} = product
+            product.discountPrice = round(price * (1-(discount*0.01)), 2);
+        })
+
+        res.status(200).json( {results: {products}} );
+    } catch (error) {
+        res.status(500).json( {results: {err:'Fallo en la conexión a la DB'}} );
+    }
 }
 
 module.exports = {

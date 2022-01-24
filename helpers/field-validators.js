@@ -70,10 +70,11 @@ async function validateFiles({ files, res }){
         res.status(400).json({ err: 'Alguna imagen es demasiado grande' });
         return false;
     }
-    
+
     return true;
 }
 
+//Funcion para redondear el precio a dos decimales - no es de mi autoria
 function round(value, exp) {
     if (typeof exp === 'undefined' || +exp === 0)
         return Math.round(value);
@@ -94,6 +95,7 @@ function round(value, exp) {
 }
 
 module.exports = {
+    round,
     validateFields,
     validateFiles
 };
