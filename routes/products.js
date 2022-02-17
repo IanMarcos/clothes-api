@@ -2,6 +2,7 @@ const { Router } = require('express');
 const multer  = require('multer');
 const path = require('path');
 const { createProduct, getProducts } = require('../controllers/product');
+const { validateFields, validateFiles } = require('../middlewares/field-validators');
 
 //Configuración de multer para que guarde archivos con su extensión
 const storage = multer.diskStorage({
@@ -16,7 +17,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = Router();
 
-router.post('/new', upload.array('prodImg', 5), createProduct);
+router.post('/new', [
+    upload.array('prodImg', 5),
+    validateFields,
+    validateFiles
+], createProduct);
 
 router.get('/all', getProducts);
 

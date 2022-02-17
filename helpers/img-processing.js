@@ -33,7 +33,7 @@ function getFormat(mimetype){
 async function processImgs(imgs) {
 
     const imgsToCompress = [];  //array de promises
-    const imgsToResize = [];    //array de promisese
+    const imgsToResize = [];    //array de promises
     let definitiveImgs = [];    //array de objetos
 
     //Primero se buscan las imagenes demasiado grandes y se tratan de comprimir
