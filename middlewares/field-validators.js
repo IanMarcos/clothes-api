@@ -5,11 +5,8 @@ const { deleteDirContents } = require('../helpers/file-system');
 
 function validateFields( req, res, next ) {
 
-    let { name, description='', price, discount=0, country } = req.body;
-    price = Number(price);
+    let { name, description = '', price, discount = 0, country } = req.body;
     discount = Number(discount);
-    country = country.toUpperCase();
-
     const err = [];
 
     if(!name || name.length === 0 || name.length > 50){
@@ -20,17 +17,23 @@ function validateFields( req, res, next ) {
         err.push('Descripción demasiado larga');
     }
 
-    if(!price || isNaN(price) || price < 0){
-        err.push('Precio no valido');
-    }
-
-    if(discount <0 || discount>100){
+    if(isNaN(discount) || discount < 0 || discount > 100){
         err.push('Descuento no valido');
     }
 
-    if( !country || country.length !== 2 || lookup.byIso(country) === null ){
-        err.push('Código de País no valido');
-    }
+    if(price) {
+        price = Number(price);
+        if(isNaN(price) || price < 0){
+            err.push('Precio no valido');
+        }
+    } else err.push('Precio no incluido');
+
+    if(country) {
+        country = country.toUpperCase();
+        if(country.length !== 2 || lookup.byIso(country) === null){
+            err.push('Código de País no valido');
+        }
+    } else err.push('País no incluido');
 
     //Formato del precio a dos decimales
     if(price % 1 !== 0){
