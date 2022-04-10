@@ -62,6 +62,11 @@ function validateFields( req, res, next ) {
 }
 
 async function validateFiles( req, res, next ){
+    if(req.files.length < 2 || req.files.length > 5){
+        deleteDirContents('uploads');
+        return res.status(400).json({err:'Cantidad de imágenes no aceptada'});
+    }
+
     //Se corrige el path en caso de que incluya //
     req.files.forEach(file => {
         if(file.path.includes('\\')){

@@ -18,7 +18,7 @@ const createProduct = async(req, res) => {
 
     try {
         const newProduct = await product.save();
-        return res.status(201).json({ results: {status: 200, product:newProduct} });
+        return res.status(201).json({ results: {status: 201, product:newProduct} });
     } catch (error) {
         return res.status(500).json({ err: {error}, results: product, msg: 'Fallo la conexion a la BD' });
     }
