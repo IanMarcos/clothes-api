@@ -5,7 +5,7 @@ const { saveImgToHosting } = require('../helpers/img-saving');
 const createProduct = async(req, res) => {
     //Se almacenan las imagenes en imgBB
     const images = await saveImgToHosting(req.files);
-    if(!images) return res.status(500).json( {err: 'Error al guardar imágenes'});
+    if(!images) return res.status(500).json( {err: 'Error al guardar imágenes', status:500});
     
     //Se guarda el producto en mongo
     const { schema } = req;
@@ -14,9 +14,9 @@ const createProduct = async(req, res) => {
 
     try {
         const newProduct = await product.save();
-        return res.status(201).json({ results: {status: 201, product:newProduct} });
+        return res.status(201).json({ results: {product:newProduct}, status: 201 });
     } catch (error) {
-        return res.status(500).json({ err: {error}, results: product, msg: 'Fallo la conexion a la BD' });
+        return res.status(500).json({ err: {error}, status:500, msg: 'Fallo la conexion a la BD' });
     }
 
 }
@@ -48,7 +48,7 @@ const getProducts = async(req, res) => {
 
         res.status(200).json( {results: {products}, status:200} );
     } catch (error) {
-        res.status(500).json( {results: {err:'Fallo en la conexión a la DB'}} );
+        res.status(500).json( {results: {err:'Fallo en la conexión a la DB'}, status:500} );
     }
 }
 

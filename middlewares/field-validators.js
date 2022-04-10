@@ -50,7 +50,7 @@ function validateFields( req, res, next ) {
     }
  
     if(err.length > 0){
-        return res.status(400).json({err});
+        return res.status(400).json({err, status:400});
     }
 
     //Se almacenan los datos validados y en el correcto formato en el request
@@ -61,7 +61,7 @@ function validateFields( req, res, next ) {
 
 async function validateFiles( req, res, next ){
     if(req.files.length < 2 || req.files.length > 5){
-        return res.status(400).json({err:'Cantidad de imágenes no aceptada'});
+        return res.status(400).json({err:'Cantidad de imágenes no aceptada', status:400});
     }
 
     //Se corrige el path en caso de que incluya //
@@ -75,7 +75,7 @@ async function validateFiles( req, res, next ){
     const validFormats = ['jpeg', 'jpg', 'png', 'webp'];
 
     if( files.some(file => !validFormats.includes( getFormat(file.mimetype) ))){
-        return res.status(400).json({err:'Formato inadecuado de archivos'});
+        return res.status(400).json({err:'Formato inadecuado de archivos', status:400});
     }
 
 
@@ -84,12 +84,12 @@ async function validateFiles( req, res, next ){
 
     //Si algun elemento es null hubo algún fallo procesando las imagenes
     if (proccessedImgData.includes(null)){
-        return res.status(400).json({err:'Error inseperado procesando las imagenes'});
+        return res.status(500).json({err:'Error inseperado procesando las imagenes', status:500});
     }
 
     //Se verifica que ninguna imagen haya quedado de más de 1MB
     if(proccessedImgData.some(img => img.size >= 1000000)){
-        return res.status(400).json({err:'Alguna imagen es demasiado grande'});
+        return res.status(400).json({err:'Alguna imagen es demasiado grande', status:400});
     }
 
     next();
