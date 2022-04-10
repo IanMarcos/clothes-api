@@ -1,6 +1,6 @@
 {
   "name": "clothesstore-api",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "clothesstore api de productos",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "country-code-lookup": "^0.0.20",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
+    "find-remove": "^4.0.4",
     "form-data": "^4.0.0",
     "mongoose": "^6.1.7",
     "multer": "^1.4.4",

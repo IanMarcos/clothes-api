@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const saveImgToHosting = async (files) => {
     //Array de promises
-    const url = `https://api.imgbb.com/1/upload?key=${proccess.env.IMGBB_KEY}`
+    const url = `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_KEY}`
     
     const toPost = files.map( file => {
         const data = new FormData();

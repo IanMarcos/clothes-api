@@ -1,14 +1,10 @@
 const Product = require('../models/product');
-const { deleteDirContents } = require('../helpers/file-system');
 const { round } = require('../helpers/math');
 const { saveImgToHosting } = require('../helpers/img-saving');
 
 const createProduct = async(req, res) => {
     //Se almacenan las imagenes en imgBB
     const images = await saveImgToHosting(req.files);
-    //Se eliminan las imagenes del servidor
-    deleteDirContents('uploads');
-
     if(!images) return res.status(500).json( {err: 'Error al guardar imágenes'});
     
     //Se guarda el producto en mongo

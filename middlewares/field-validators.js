@@ -1,7 +1,6 @@
 const lookup = require('country-code-lookup');
 const { getFormat, processImgs } = require('../helpers/img-processing');
 const { round } = require('../helpers/math');
-const { deleteDirContents } = require('../helpers/file-system');
 
 function validateFields( req, res, next ) {
 
@@ -51,7 +50,6 @@ function validateFields( req, res, next ) {
     }
  
     if(err.length > 0){
-        deleteDirContents('uploads');
         return res.status(400).json({err});
     }
 
@@ -63,7 +61,6 @@ function validateFields( req, res, next ) {
 
 async function validateFiles( req, res, next ){
     if(req.files.length < 2 || req.files.length > 5){
-        deleteDirContents('uploads');
         return res.status(400).json({err:'Cantidad de imágenes no aceptada'});
     }
 
@@ -78,7 +75,6 @@ async function validateFiles( req, res, next ){
     const validFormats = ['jpeg', 'jpg', 'png', 'webp'];
 
     if( files.some(file => !validFormats.includes( getFormat(file.mimetype) ))){
-        deleteDirContents('uploads');
         return res.status(400).json({err:'Formato inadecuado de archivos'});
     }
 
@@ -88,13 +84,11 @@ async function validateFiles( req, res, next ){
 
     //Si algun elemento es null hubo algún fallo procesando las imagenes
     if (proccessedImgData.includes(null)){
-        deleteDirContents('uploads');
         return res.status(400).json({err:'Error inseperado procesando las imagenes'});
     }
 
     //Se verifica que ninguna imagen haya quedado de más de 1MB
     if(proccessedImgData.some(img => img.size >= 1000000)){
-        deleteDirContents('uploads');
         return res.status(400).json({err:'Alguna imagen es demasiado grande'});
     }
 

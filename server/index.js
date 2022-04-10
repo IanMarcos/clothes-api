@@ -1,8 +1,9 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const { cleanOldFiles } = require('../config/file-system');
 
-const app =express();
+const app = express();
 const paths = {
     products:'/api/products'
 };
@@ -10,6 +11,7 @@ const paths = {
 connectDB();
 middlewares();
 routes();
+cleanOldFiles('uploads');
 
 async function connectDB(){
     try{
